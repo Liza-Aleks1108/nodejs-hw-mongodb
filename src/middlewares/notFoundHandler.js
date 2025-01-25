@@ -1,3 +1,5 @@
+// src/middlewares/notFoundHandler.js
+
 // notFoundHandler призначений для обробки запитів, коли клієнт звертається до неіснуючого маршруту
 
 export const notFoundHandler = (req, res, next) => {

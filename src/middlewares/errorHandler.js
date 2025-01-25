@@ -1,3 +1,5 @@
+// src/middlewares/errorHandler.js
+
 // errorHandler призначений для обробки помилок у Express-сервері
 
 import { HttpError } from 'http-errors';
