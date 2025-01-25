@@ -28,13 +28,27 @@ export const setupServer = () => {
   });
 
   app.get('/contacts', async (req, res) => {
-    const contacts = await getAllContacts();
+    try {
+      console.log('Fetching contacts...');
+      const contacts = await getAllContacts();
+      console.log('Contacts retrieved:', contacts);
 
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data: contacts,
-    });
+      if (!contacts.length) {
+        return res.status(404).json({ message: 'No contacts found' });
+      }
+
+      res.status(200).json({
+        status: 200,
+        message: 'Successfully found contacts!',
+        data: contacts,
+      });
+    } catch (error) {
+      console.error('Error in /contacts route:', error);
+      res.status(500).json({
+        message: 'Error fetching contacts',
+        error: error.message,
+      });
+    }
   });
 
   app.get('/contacts/:contactId', async (req, res, next) => {
