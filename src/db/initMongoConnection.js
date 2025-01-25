@@ -1,4 +1,5 @@
 // src/db/initMongoDB.js
+
 import mongoose from 'mongoose';
 
 import { env } from '../utils/env.js';
