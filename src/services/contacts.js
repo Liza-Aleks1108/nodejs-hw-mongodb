@@ -1,9 +1,21 @@
 import { ContactsCollection } from '../db/models/contacts.js';
 
 export const getAllContacts = async () => {
-  return await ContactsCollection.find();
+  try {
+    return await ContactsCollection.find();
+  } catch (error) {
+    throw new Error('Error fetching contacts: ' + error.message);
+  }
 };
 
 export const getContactById = async (id) => {
-  return await ContactsCollection.findById(id);
+  try {
+    const contact = await ContactsCollection.findById(id);
+    if (!contact) {
+      throw new Error('Contact not found');
+    }
+    return contact;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
