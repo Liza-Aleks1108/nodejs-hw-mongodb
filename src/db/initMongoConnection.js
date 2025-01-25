@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 
 import { env } from '../utils/env.js';
 
-export const initMongoDB = async () => {
+export const initMongoConnection = async () => {
   try {
     const user = env('MONGODB_USER');
     const pwd = env('MONGODB_PASSWORD');
