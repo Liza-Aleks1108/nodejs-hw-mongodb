@@ -27,28 +27,20 @@ export const setupServer = () => {
     });
   });
 
+  app.get('/', (req, res) => {
+    res.json({
+      message: 'Hello! Welcome to ContactsApp!',
+    });
+  });
+
   app.get('/contacts', async (req, res) => {
-    try {
-      console.log('Fetching contacts...');
-      const contacts = await getAllContacts();
-      console.log('Contacts retrieved:', contacts);
+    const contacts = await getAllContacts();
 
-      if (!contacts.length) {
-        return res.status(404).json({ message: 'No contacts found' });
-      }
-
-      res.status(200).json({
-        status: 200,
-        message: 'Successfully found contacts!',
-        data: contacts,
-      });
-    } catch (error) {
-      console.error('Error in /contacts route:', error);
-      res.status(500).json({
-        message: 'Error fetching contacts',
-        error: error.message,
-      });
-    }
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully found contacts!',
+      data: contacts,
+    });
   });
 
   app.get('/contacts/:contactId', async (req, res, next) => {
