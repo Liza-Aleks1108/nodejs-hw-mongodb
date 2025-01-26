@@ -32,6 +32,8 @@ const contactsSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
     },
+    // Додайте поле photo типу String в моделі Contact
+    photo: { type: String },
   },
   {
     timestamps: true,
