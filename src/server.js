@@ -6,7 +6,7 @@ import cors from 'cors';
 import { env } from './utils/env.js';
 
 // new import
-import contactsRouter from './routers/contacts.js';
+import rootRouter from './routers/index.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
@@ -35,7 +35,7 @@ export const setupServer = () => {
     });
   });
 
-  app.use(contactsRouter);
+  app.use(rootRouter);
 
   app.use('*', notFoundHandler);
 

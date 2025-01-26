@@ -24,33 +24,34 @@ import { validateBody } from '../middlewares/validateBody.js';
 // isValidId для перевірки валідності id
 import { isValidId } from '../middlewares/isValidId.js';
 
-const router = Router();
+// contactsRouter
+const contactsRouter = Router();
 
-router.get('/contacts', ctrlWrapper(getContactsController));
+contactsRouter.get('/contacts', ctrlWrapper(getContactsController));
 
-router.get(
+contactsRouter.get(
   '/contacts/:contactId',
   isValidId,
   ctrlWrapper(getContactByIdController),
 );
 
-router.post(
+contactsRouter.post(
   '/contacts',
   validateBody(createContactsValidationSchema),
   ctrlWrapper(createContactController),
 );
 
-router.patch(
+contactsRouter.patch(
   '/contacts/:contactId',
   isValidId,
   validateBody(updateContactsValidationSchema),
   ctrlWrapper(patchContactController),
 );
 
-router.delete(
+contactsRouter.delete(
   '/contacts/:contactId',
   isValidId,
   ctrlWrapper(deleteContactController),
 );
 
-export default router;
+export default contactsRouter;
