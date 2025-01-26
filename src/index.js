@@ -9,3 +9,6 @@ const bootstrap = async () => {
 };
 
 bootstrap();
+
+// Під час виконання дз4 було додано валідацію за допомогою Joi
+// npm i joi

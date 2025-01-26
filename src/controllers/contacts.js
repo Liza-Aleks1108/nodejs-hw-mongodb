@@ -11,7 +11,7 @@ import {
 //пакет http-errors для опрацювання різних помилок
 import createHttpError from 'http-errors';
 
-export const getStudentsController = async (req, res) => {
+export const getContactsController = async (req, res) => {
   const contacts = await getAllContacts();
 
   res.json({
