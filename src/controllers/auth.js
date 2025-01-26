@@ -5,6 +5,8 @@ import {
   logoutUser,
   refreshSession,
   registerUser,
+  requestResetPasswordToken,
+  resetPassword,
 } from '../services/auth.js';
 
 const setupSession = (res, session) => {
@@ -76,4 +78,25 @@ export const logoutUserController = async (req, res) => {
 
   // Відповідь сервера, в разі успішного логаута, має бути зі статусом 204, без тіла відповіді
   res.status(204).send();
+};
+
+// У разі успішного надсилання листа відповідь сервера має бути зі статусом 200 та містити об’єкт з наступними властивостями:
+export const sendResetEmailController = async (req, res) => {
+  await requestResetPasswordToken(req.body.email);
+  res.json({
+    status: 200,
+    message: 'Reset password email has been successfully sent.',
+    data: {},
+  });
+};
+
+// У разі успішної заміни паролю відповідь сервера має бути зі статусом 200 та містити об’єкт з наступними властивостями:
+export const resetPasswordController = async (req, res) => {
+  const { password, token } = req.body;
+  await resetPassword(password, token);
+  res.json({
+    status: 200,
+    message: 'Password has been successfully reset.',
+    data: {},
+  });
 };
