@@ -1,12 +1,29 @@
 // src/controllers/auth.js
 
-import { loginUser, registerUser } from '../services/auth.js';
+import {
+  loginUser,
+  logoutUser,
+  refreshSession,
+  registerUser,
+} from '../services/auth.js';
 
-export const registerController = async (req, res, next) => {
+const setupSession = (res, session) => {
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+  res.cookie('sessionId', session._id, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+};
+
+// Реєстрації нового користувача
+export const registerUserController = async (req, res, next) => {
   try {
     const newUser = await registerUser(req.body);
 
-    //   Відповідь сервера, в разі успішного створення нового користувача, має бути зі статусом 201
+    // Відповідь сервера, в разі успішного створення нового користувача, має бути зі статусом 201 і містити об’єкт з наступними властивостями:
     res.status(201).json({
       status: 201,
       message: 'Successfully registered a user!',
@@ -17,19 +34,46 @@ export const registerController = async (req, res, next) => {
   }
 };
 
-export const loginUserController = async (req, res, next) => {
+// Аутентифікації користувача
+export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
-  res.cookie('refreshToken', session.refreshToken, {
-    httpOnly: true,
-    expires: session.refreshTokenValidUntil,
-  });
-  res.cookie('sessionId', session._id, {
-    httpOnly: true,
-    expires: session.refreshTokenValidUntil,
-  });
+
+  setupSession(res, session);
+
+  // Відповідь сервера, в разі успішного створення нового контакту, має бути зі статусом 200 і містити об’єкт з наступними властивостями:
   res.json({
     status: 200,
     message: 'User successfully logged in!',
-    data: session.accessToken,
+    data: { accessToken: session.accessToken },
   });
+};
+
+// Оновлення сесії на основі рефреш токена, який записаний в cookies
+export const refreshSessionController = async (req, res) => {
+  const { sessionId, refreshToken } = req.cookies;
+  const session = await refreshSession({ sessionId, refreshToken });
+
+  setupSession(res, session);
+
+  // Відповідь сервера, в разі успішного створення нового контакту, має бути зі статусом 200 і містити об’єкт з наступними властивостями:
+  res.json({
+    status: 200,
+    message: 'Successfully refreshed a session!',
+    data: { accessToken: session.accessToken },
+  });
+};
+
+// Видалення сесії на основі id сесії та токена, який записаний в cookies
+export const logoutUserController = async (req, res) => {
+  const { sessionId } = req.cookies;
+  if (sessionId) {
+    await logoutUser(sessionId);
+  }
+
+  // Поточна сесія має бути видалена
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+
+  // Відповідь сервера, в разі успішного логаута, має бути зі статусом 204, без тіла відповіді
+  res.status(204).send();
 };
