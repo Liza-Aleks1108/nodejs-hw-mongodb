@@ -18,7 +18,7 @@ const contactsSchema = new Schema(
     },
     isFavourite: {
       type: Boolean,
-      required: true,
+      required: false,
       default: false,
     },
     contactType: {
@@ -26,6 +26,11 @@ const contactsSchema = new Schema(
       required: true,
       enum: ['work', 'home', 'personal'],
       default: 'personal',
+    },
+    // Розширте модель Contact обовʼязковим полем userId, яке буде вказувати на приналежність контакта певному користувачу
+    userId: {
+      type: Schema.Types.ObjectId,
+      required: true,
     },
   },
   {
