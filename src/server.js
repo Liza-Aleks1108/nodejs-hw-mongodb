@@ -10,6 +10,9 @@ import rootRouter from './routers/index.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
+// cookie - parser
+import cookieParser from 'cookie-parser';
+
 const PORT = Number(env('PORT', '3000'));
 
 export const setupServer = () => {
@@ -28,6 +31,9 @@ export const setupServer = () => {
 
   // Enable CORS for cross-origin resource sharing (CORS).
   app.use(cors());
+
+  // cookie-parser middleware
+  app.use(cookieParser());
 
   app.get('/', (req, res) => {
     res.json({
