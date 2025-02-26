@@ -1,5 +1,7 @@
 // src/controllers/auth.js
 
+import createHttpError from 'http-errors';
+
 import {
   loginUser,
   logoutUser,
@@ -35,17 +37,25 @@ export const registerUserController = async (req, res, next) => {
 };
 
 // Аутентифікації користувача
-export const loginUserController = async (req, res) => {
-  const session = await loginUser(req.body);
+export const loginUserController = async (req, res, next) => {
+  try {
+    const session = await loginUser(req.body);
 
-  setupSession(res, session);
+    if (!session) {
+      throw createHttpError(401, 'Invalid credentials');
+    }
 
-  // Відповідь сервера, в разі успішного створення нового контакту, має бути зі статусом 200 і містити об’єкт з наступними властивостями:
-  res.json({
-    status: 200,
-    message: 'User successfully logged in!',
-    data: { accessToken: session.accessToken },
-  });
+    setupSession(res, session);
+
+    // Відповідь сервера, в разі успішного створення нового контакту, має бути зі статусом 200 і містити об’єкт з наступними властивостями:
+    res.json({
+      status: 200,
+      message: 'User successfully logged in!',
+      data: { accessToken: session.accessToken },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // Оновлення сесії на основі рефреш токена, який записаний в cookies
