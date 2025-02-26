@@ -64,14 +64,23 @@ export const getContactByIdController = async (req, res, next) => {
   }
 };
 
+import { createContact } from '../services/contacts.js';
+
 export const createContactController = async (req, res, next) => {
   try {
-    const { _id: userId } = req.user; // Отримуємо userId залогіненого користувача
-    const newContact = await createContact({ ...req.body, owner: userId }); // Передаємо userId у сервіс
+    const { userId } = req.user; // Якщо токен передається через middleware, де додається userId
 
-    res.status(201).json({
-      status: 201,
-      message: 'Successfully created a contact!',
+    // Переконайтесь, що в тілі запиту немає userId
+    const contactData = {
+      ...req.body,
+      userId, // Додаємо userId до даних контакту
+    };
+
+    const newContact = await createContact(contactData);
+
+    return res.status(201).json({
+      status: 'success',
+      message: 'Contact created successfully',
       data: newContact,
     });
   } catch (error) {
