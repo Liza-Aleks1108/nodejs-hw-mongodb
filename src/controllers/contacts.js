@@ -50,10 +50,6 @@ export const getContactByIdController = async (req, res, next) => {
       throw createHttpError(404, 'Contact not found');
     }
 
-    if (contact.owner.toString() !== userId) {
-      throw createHttpError(403, 'Access denied');
-    }
-
     res.status(200).json({
       status: 200,
       message: `Successfully found contact with id ${contactId}!`,
@@ -97,10 +93,6 @@ export const patchContactController = async (req, res, next) => {
       throw createHttpError(404, 'Contact not found');
     }
 
-    if (contact.owner.toString() !== userId) {
-      throw createHttpError(403, 'Access denied');
-    }
-
     const updatedContact = await updateContact(contactId, req.body);
 
     res.json({
@@ -122,10 +114,6 @@ export const deleteContactController = async (req, res, next) => {
 
     if (!contactToDelete) {
       throw createHttpError(404, 'Contact not found');
-    }
-
-    if (contactToDelete.owner.toString() !== userId) {
-      throw createHttpError(403, 'Access denied');
     }
 
     await deleteContact(contactId);
