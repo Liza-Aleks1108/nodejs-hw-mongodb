@@ -8,10 +8,10 @@ import {
   updateContact,
 } from '../services/contacts.js';
 
-//пакет http-errors для опрацювання різних помилок
+// Пакет http-errors для обробки різних помилок
 import createHttpError from 'http-errors';
 
-//utils
+// utils
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 
@@ -19,10 +19,10 @@ export const getContactsController = async (req, res, next) => {
   try {
     const { page, perPage } = parsePaginationParams(req.query);
     const { sortBy, sortOrder } = parseSortParams(req.query);
-    const { _id: userId } = req.user;
+    const { _id: userId } = req.user; // Беремо userId з req.user
 
     const contacts = await getAllContacts({
-      userId,
+      userId, // передаємо userId в getAllContacts
       page,
       perPage,
       sortBy,
@@ -42,9 +42,10 @@ export const getContactsController = async (req, res, next) => {
 export const getContactByIdController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const { _id: userId } = req.user;
+    const { _id: userId } = req.user; // Беремо userId з req.user
 
-    const contact = await getContactById(contactId);
+    // Виправляємо виклик функції getContactById, додаємо userId
+    const contact = await getContactById({ _id: contactId, userId });
 
     if (!contact) {
       throw createHttpError(404, 'Contact not found');
@@ -64,16 +65,14 @@ export const getContactByIdController = async (req, res, next) => {
   }
 };
 
-import { createContact } from '../services/contacts.js';
-
 export const createContactController = async (req, res, next) => {
   try {
-    const { userId } = req.user; // Якщо токен передається через middleware, де додається userId
+    const { _id: userId } = req.user; // Отримуємо userId з req.user (з middleware або токену)
 
-    // Переконайтесь, що в тілі запиту немає userId
+    // Передаємо userId з req.user в тілі запиту
     const contactData = {
       ...req.body,
-      userId, // Додаємо userId до даних контакту
+      userId, // додаємо userId до даних контакту
     };
 
     const newContact = await createContact(contactData);
@@ -91,9 +90,10 @@ export const createContactController = async (req, res, next) => {
 export const patchContactController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const { _id: userId } = req.user;
+    const { _id: userId } = req.user; // Беремо userId з req.user
 
-    const contact = await getContactById(contactId);
+    const contact = await getContactById({ _id: contactId, userId });
+
     if (!contact) {
       throw createHttpError(404, 'Contact not found');
     }
@@ -117,9 +117,10 @@ export const patchContactController = async (req, res, next) => {
 export const deleteContactController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const { _id: userId } = req.user;
+    const { _id: userId } = req.user; // Беремо userId з req.user
 
-    const contactToDelete = await getContactById(contactId);
+    const contactToDelete = await getContactById({ _id: contactId, userId });
+
     if (!contactToDelete) {
       throw createHttpError(404, 'Contact not found');
     }
