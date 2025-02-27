@@ -80,9 +80,11 @@ export const logoutUserController = async (req, res) => {
   res.status(204).send();
 };
 
-// У разі успішного надсилання листа відповідь сервера має бути зі статусом 200 та містити об’єкт з наступними властивостями:
+// Відправляє листа для відновлення паролю на email
 export const sendResetEmailController = async (req, res) => {
   await requestResetPasswordToken(req.body.email);
+
+  // Відповідь сервера, в разі успішного надсилання листа відповідь сервера має бути зі статусом 200 та містити об’єкт з наступними властивостями:
   res.json({
     status: 200,
     message: 'Reset password email has been successfully sent.',
@@ -90,10 +92,13 @@ export const sendResetEmailController = async (req, res) => {
   });
 };
 
-// У разі успішної заміни паролю відповідь сервера має бути зі статусом 200 та містити об’єкт з наступними властивостями:
+// Відновлює пароль на основі токена з відправленого листа
 export const resetPasswordController = async (req, res) => {
   const { password, token } = req.body;
+
   await resetPassword(password, token);
+
+  // Відповідь сервера, в разі успішно�� заміни паролю, має бути зі статусом 200 та містити об’єкт з наступними властивостями:
   res.json({
     status: 200,
     message: 'Password has been successfully reset.',

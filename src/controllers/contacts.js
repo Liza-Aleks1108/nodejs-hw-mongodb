@@ -21,11 +21,11 @@ export const getContactsController = async (req, res) => {
   const { sortBy, sortOrder } = parseSortParams(req.query);
 
   const contacts = await getAllContacts({
-    userId: req.user._id,
     page,
     perPage,
     sortBy,
     sortOrder,
+    userId: req.user._id,
   });
 
   res.json({
