@@ -43,13 +43,11 @@ export const setupServer = () => {
   });
 
   app.use(rootRouter);
-
+  // Swagger documentation middleware'
+  app.use('/api-docs', swaggerDocs());
   app.use('*', notFoundHandler);
 
   app.use(errorHandler);
-
-  // Swagger documentation middleware'
-  app.use('/api-docs', swaggerDocs());
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
