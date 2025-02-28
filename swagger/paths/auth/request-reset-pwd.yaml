@@ -37,6 +37,5 @@ responses:
               example: Reset password email has been successfully sent.
             data:
               type: object
-              properties: null
   '404':
     $ref: '../../components/responses/404.yaml'

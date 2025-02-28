@@ -13,7 +13,7 @@ content:
           example: 404
         message:
           type: string
-          oneOf:
+          enum:
             - Contact not found
             - User not found
         data:
@@ -23,6 +23,6 @@ content:
           properties:
             message:
               type: string
-              oneOf:
+              enum:
                 - 'Contact with {id} not found'
                 - 'User not found'

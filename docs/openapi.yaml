@@ -1,11 +1,11 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: <назва вашого додатку>
+  title: ContactsApp
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description: Contacts App
+  description: Documentation of the ContactsApp.
 tags:
   - name: Contacts
     description: Operations about contacts.
@@ -14,6 +14,7 @@ tags:
 servers:
   - url: http://localhost:3000
   - url: https://swagger-pyy4.onrender.com
+paths:
   /contacts:
     get:
       $ref: ../swagger/paths/contacts/get.yaml
@@ -44,6 +45,7 @@ servers:
   /auth/reset-pwd:
     post:
       $ref: ../swagger/paths/auth/reset-pwd.yaml
+
 components:
   securitySchemes:
     bearerAuth:

@@ -42,7 +42,6 @@ responses:
               example: Password has been successfully reset.
             data:
               type: object
-              properties: null
   '401':
     $ref: '../../components/responses/401.yaml'
   '404':
