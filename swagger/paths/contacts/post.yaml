@@ -1,8 +1,8 @@
 tags:
   - Contacts
-summary: Create new contact
+summary: Create contact
 operationId: createContact
-description: 'Create a new contact with payload'
+description: 'Create a contact with payload'
 security:
   - bearerAuth: []
 requestBody:
@@ -13,8 +13,6 @@ requestBody:
         required:
           - name
           - phoneNumber
-          - email
-          - isFavourite
           - contactType
         properties:
           name:
@@ -22,29 +20,28 @@ requestBody:
             type: string
             example: 'John Doe'
           phoneNumber:
-            description: "Contact's phone number"
-            type: string
-            example: '+380000000002'
+            description: "Contact's phoneNumber"
+            type: number
+            example: 380987393434
           email:
-            description: "Student's email"
+            description: "Contact's email"
             type: string
-            example: 'john@example.com'
+            example: 'JohnDoe123@gmail.com'
           isFavourite:
-            description: 'Whether the contact is favourite or not'
+            description: "Contact's isFavourite"
             type: boolean
-            default: false
+            example: false
           contactType:
-            description: 'The type of the contact. Should be one of the following: work, home, personal'
+            description: "Contact's contactType"
             type: string
-            enum: ['work', 'home', 'personal']
+            example: 'personal'
           photo:
-            description: "Upload contact's photo"
+            description: "Contact's photo"
             type: string
             format: binary
-
 responses:
   '201':
-    description: Creates a new contact
+    description: Creates a contact
     content:
       application/json:
         schema:
@@ -59,7 +56,7 @@ responses:
               example: 201
             message:
               type: string
-              example: Successfully created a new contact!
+              example: Successfully created a contact!
             data:
               type: object
               $ref: ../../components/schemas/contact.yaml
