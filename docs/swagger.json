@@ -172,9 +172,9 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "Create new contact",
+        "summary": "Create contact",
         "operationId": "createContact",
-        "description": "Create a new contact with payload",
+        "description": "Create a contact with payload",
         "security": [
           {
             "bearerAuth": []
@@ -188,10 +188,7 @@
                 "required": [
                   "name",
                   "phoneNumber",
-                  "email",
-                  "isFavourite",
-                  "contactType",
-                  "userId"
+                  "contactType"
                 ],
                 "properties": {
                   "name": {
@@ -200,38 +197,29 @@
                     "example": "John Doe"
                   },
                   "phoneNumber": {
-                    "description": "Contact's phone number",
-                    "type": "string",
-                    "example": "+380000000002"
+                    "description": "Contact's phoneNumber",
+                    "type": "number",
+                    "example": 380987393434
                   },
                   "email": {
-                    "description": "Student's email",
+                    "description": "Contact's email",
                     "type": "string",
-                    "example": "john@example.com"
+                    "example": "JohnDoe123@gmail.com"
                   },
                   "isFavourite": {
-                    "description": "Whether the contact is favourite or not",
+                    "description": "Contact's isFavourite",
                     "type": "boolean",
-                    "default": false
+                    "example": false
                   },
                   "contactType": {
-                    "description": "The type of the contact. Should be one of the following: work, home, personal",
+                    "description": "Contact's contactType",
                     "type": "string",
-                    "enum": [
-                      "work",
-                      "home",
-                      "personal"
-                    ]
-                  },
-                  "userId": {
-                    "description": "Contact's owner id",
-                    "type": "string",
-                    "example": "65e4decdd286b30065d54af9"
+                    "example": "personal"
                   },
                   "photo": {
-                    "description": "Link to contact's photo",
+                    "description": "Contact's photo",
                     "type": "string",
-                    "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
+                    "format": "binary"
                   }
                 }
               }
@@ -240,7 +228,7 @@
         },
         "responses": {
           "201": {
-            "description": "Creates a new contact",
+            "description": "Creates a contact",
             "content": {
               "application/json": {
                 "schema": {
@@ -257,7 +245,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully created a new contact!"
+                      "example": "Successfully created a contact!"
                     },
                     "data": {
                       "type": "object",
@@ -279,9 +267,9 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "Change contact by its id",
-        "operationId": "patchContactById",
-        "description": "Change some info in a particular contact by its id",
+        "summary": "Patch contact by id",
+        "operationId": "patchContact",
+        "description": "Patch contact by id. Please provide only valid mongodb id",
         "security": [
           {
             "bearerAuth": []
@@ -289,59 +277,50 @@
         ],
         "parameters": [
           {
-            "name": "id",
             "in": "path",
+            "name": "id",
             "required": true,
             "schema": {
               "type": "string",
-              "example": "66a277d1926b34d43fca92f3"
+              "example": "678bf8af14d55985f0900f6e"
             }
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
                   "name": {
-                    "description": "Contact's name",
                     "type": "string",
                     "example": "John Doe"
                   },
                   "phoneNumber": {
-                    "description": "Contact's phone number",
                     "type": "string",
-                    "example": "+380000000002"
+                    "example": "+380987383434"
                   },
                   "email": {
-                    "description": "Student's age",
                     "type": "string",
-                    "example": "john@example.com"
+                    "example": "john.doe@gmail.com"
                   },
                   "isFavourite": {
-                    "description": "Whether the contact is favourite or not",
                     "type": "boolean",
-                    "default": false
+                    "example": true
                   },
                   "contactType": {
-                    "description": "The type of the contact. Should be one of the following: work, home, personal",
                     "type": "string",
                     "enum": [
+                      "personal",
                       "work",
-                      "home",
-                      "personal"
-                    ]
-                  },
-                  "userId": {
-                    "description": "Contact's owner id",
-                    "type": "string",
-                    "example": "65e4decdd286b30065d54af9"
+                      "family"
+                    ],
+                    "example": "personal"
                   },
                   "photo": {
-                    "description": "Link to contact's photo",
                     "type": "string",
-                    "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
+                    "format": "binary"
                   }
                 }
               }
@@ -350,7 +329,7 @@
         },
         "responses": {
           "200": {
-            "description": "Successfully patched a contact!",
+            "description": "Successfully updated contact",
             "content": {
               "application/json": {
                 "schema": {
@@ -367,7 +346,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully patched a contact!"
+                      "example": "Successfully found contact with id 65ca67e7ae7f10c88b598384!"
                     },
                     "data": {
                       "type": "object",
@@ -380,9 +359,6 @@
           },
           "401": {
             "$ref": "#/components/responses/401"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
           }
         }
       },
@@ -922,11 +898,6 @@
               "home",
               "personal"
             ]
-          },
-          "userId": {
-            "description": "Contact's owner id",
-            "type": "string",
-            "example": "65e4decdd286b30065d54af9"
           },
           "photo": {
             "description": "Link to contact's photo",
